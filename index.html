@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SLICE TYPE PREDICTION</title>
+    <style>
+        body {
+            background-image: url("{{ url_for('Static', filename='bg.jpg') }}"); /* Corrected URL for the background image */
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: blue;
+        }
+        .colored-text {
+            color: black; /* Change the color as needed */
+            font-family: 'Times New Roman', sans-serif; /* Optional: Change font family */
+            font-size: 20px; /* Adjust the font size */
+            font-weight: bold; /* Make the text bold */
+            background-color: black; /* Set background highlight color */
+            padding: 6px; /* Add padding for better visibility */
+            /*display: inline-block; /* Make the div adjust its size to the text */*/
+            vertical-align: bottom; /* Align the inline-block element to the bottom */
+            line-height: 1; /* Reset the line height to position the element accurately */
+        }
+
+        form {
+            display: inline-block;
+            margin-top: 80px;
+            background-color: rgba(250, 250, 250, 0.8); /* Semi-transparent white background */
+            padding: 40px;
+            border-radius: 30px;
+        }
+
+        table {
+            margin: auto;
+        }
+        overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #000000;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 20px;
+            text-align: left;
+        }
+         result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>SLICE TYPE PREDICTION</h1>
+    <form id="predictionForm" , class="overlay-text">
+        <table , class="overlay-text">
+            <tr>
+                <td><label for="Packet_delay"><font face="Arial">Packet Delay (The time taken for a packet to be received):</font></label></td>
+                <td><input type="number" id="Packet_delay" name="Packet_delay"></td>
+            </tr>
+            <tr>
+                <td><label for="IoT"><font face="Arial">IoT (Device Usage):</font></label></td>
+                <td><input type="number" id="IoT" name="IoT"></td>
+            </tr>
+            <tr>
+                <td><label for="LTE_5G"><font face="Arial">LTE/5G (User Equipment categories or classes to define the performance specifications):</font></label></td>
+                <td><input type="number" id="LTE_5G" name="LTE_5G"></td>
+            </tr>
+            <tr>
+                <td><label for="GBR"><font face="Arial">GBR (Guaranteed Bit Rate, Ensures a minimum rate of data transfer):</font></label></td>
+                <td><input type="number" id="GBR" name="GBR"></td>
+            </tr>
+            <tr>
+                <td><label for="Non_GBR"><font face="Arial">Non_GBR (Non-GBR services do not guarantee a specific data transfer rate):</font></label></td>
+                <td><input type="number" id="Non_GBR" name="Non_GBR"></td>
+            </tr>
+            <tr>
+                <td><label for="AR_VR_Gaming"><font face="Arial">AR_VR_Gaming (Augmented Reality (AR), Virtual Reality (VR), and Gaming applications):</font></label></td>
+                <td><input type="number" id="AR_VR_Gaming" name="AR_VR_Gaming"></td>
+            </tr>
+            <tr>
+                <td><label for="Healthcare"><font face="Arial">Healthcare (Usage in Healthcare):</font></label></td>
+                <td><input type="number" id="Healthcare" name="Healthcare"></td>
+            </tr>
+            <tr>
+                <td><label for="Industry_4.0"><font face="Arial">Industry_4.0 (Usage in Digital Enterprises):</font></label></td>
+                <td><input type="number" id="Industry_4.0" name="Industry_4.0"></td>
+            </tr>
+            <tr>
+                <td><label for="Public_Safety"><font face="Arial">Public Safety (Usage for public welfare and safety purposes):</font></label></td>
+                <td><input type="number" id="Public_Safety" name="Public_Safety"></td>
+            </tr>
+            <tr>
+                <td><label for="Smart_Transportation"><font face="Arial">Smart Transportation (Usage in public transportation):</font></label></td>
+                <td><input type="number" id="Smart_Transportation" name="Smart_Transportation"></td>
+            </tr>
+            <tr>
+                <td><label for="Smartphone"><font face="Arial">Smartphone (Whether used for smartphone cellular data):</font></label></td>
+                <td><input type="number" id="Smartphone" name="Smartphone"></td>
+            </tr>
+        </table>
+        <br>
+        <input type="button" value="Predict" onclick="predict()">
+    </form>
+
+    <div id="result" class="colored-text"></div>
+
+    <script>
+        function predict() {
+            const formData = new FormData(document.getElementById("predictionForm"));
+            fetch('/predict', {
+                method: 'POST',
+                body: JSON.stringify(Object.fromEntries(formData)),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("result").innerHTML = `Prediction: ${data.prediction}`;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
